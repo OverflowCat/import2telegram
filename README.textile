@@ -1,0 +1,22 @@
+h1. import2telegram
+
+p. *import2telegram* is a Python script that helps you import your QQ messages to Telegram by feigning a WhatsApp export file. It requires no third-party Python libraries.
+*import2telegram* 可以帮助你生成 WhatsApp 格式的聊天记录导出文件，以便于将 QQ 聊天记录导入 Telegram。无需安装第三方 Python 库。
+
+h2. Introduction
+
+p. All you need to do is to export your QQ chat history on your PC as a @.txt@ file, then put it in the same directory as the script. Run @python3 qqtxt.py@. It will then generates a file for each chat.
+
+p. 请在 TIM/QQ 消息管理器中导出全部的聊天记录（ @.txt@ 格式），并置于脚本同一目录下，执行 @python3 qqtxt.py@ ，即可为每个聊天生成导入用的文件。
+
+!http://telegra.ph/file/9eb8836b1644dee137070.png!
+
+!http://telegra.ph/file/b7312e07706111fda0696.png!
+
+h2. Screenshots
+
+!http://telegra.ph/file/525f608270144dde7427f.png!
+
+!http://telegra.ph/file/f4f1024286a27a79765d7.png!
+
+!http://telegra.ph/file/61b428d2072432af76371.jpg!
