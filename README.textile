@@ -3,6 +3,8 @@ h1. import2telegram
 p. *import2telegram* is a Python script that helps you import your QQ messages to Telegram by feigning a WhatsApp export file. It requires no third-party Python libraries.
 *import2telegram* 可以帮助你生成 WhatsApp 格式的聊天记录导出文件，以便于将 QQ 聊天记录导入 Telegram。无需安装第三方 Python 库。
 
+（最后有具体教程，请往下翻）
+
 h2. Introduction
 
 p. All you need to do is to export your QQ chat history on your PC as a @.txt@ file, then put it in the same directory as the script. Run @python3 qqtxt.py@. It will then generates a file for each chat.
@@ -20,3 +22,76 @@ h2. Screenshots
 !http://telegra.ph/file/f4f1024286a27a79765d7.png!
 
 !http://telegra.ph/file/61b428d2072432af76371.jpg!
+
+h1. 如何将 QQ/TIM 聊天记录导入 Telegram
+
+p. Telegram 于昨日 "开放了聊天记录导入":https://telegram.org/blog/move-history ，方法是通过其他聊天软件分享至新版 Telegram 移动应用，再选择联系人即可完成导入。先写给太长不看的人简明的将 QQ/TIM 聊天记录导入 Telegram 的简明方法：
+
+# 用 PC 版 QQ 或 TIM 导出 @.txt@ 格式的全部消息记录，文件名为默认的 @全部消息记录.txt@ ；
+# 安装 Python3；下载 @import2telegram@ 的 @qqtxt.py@ ，并将 @全部消息记录.txt@ 置于同一文件夹；（可选）修改脚本中你的QQ用户名；执行 @python3 qqtxt.py@；
+# 选择你要导入的生成的 txt 文件，在手机上分享给 Telegram 应用。
+
+h2. 前言
+
+虽说 Durov 说之后会开放 API，但显然，我已经等不及了。
+
+h2. 原理
+
+因为看代码看不出什么名堂，也无法在网上找到 KakaoTalk 或 WhatsApp 导出文件的范例，所以我临时注册了两个 WhatsApp 账号互相发送消息并导出。导出的是 txt 文件，内容示例如下：
+
+bc.. 1/29/21, 9:19 AM - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more.
+1/29/21, 9:17 AM - +1 (114) 514-1919: Haha
+1/29/21, 9:17 AM - +1 (114) 514-1919: Test
+1/29/21, 9:17 AM - +1 (114) 514-1919: 这还端到端加密
+1/29/21, 9:17 AM - +1 (114) 514-1919: <Media omitted>
+1/29/21, 9:17 AM - +1 (114) 514-1919: 🍒🍒
+1/29/21, 9:18 AM - +1 (114) 514-1919: STK-20210129-WA0001.webp (file attached)
+1/29/21, 9:18 AM - +1 (114) 514-1919: STK-20210129-WA0000.webp (file attached)
+1/29/21, 9:19 AM - +1 (114) 514-1919: <Media omitted>
+身份的焦虑(1).epub
+1/29/21, 9:19 AM - 猫猫: 行
+1/29/21, 9:19 AM - 猫猫: 好，测试多行
+
+
+
+多行结束
+
+bq. 手机号是杜撰的。
+
+p. 由是，目前可以得出的结论：换行符会保留；日期格式为 @月/日/两位年, 无零占位十二小时制时:有零占位分 XM@ 。测试发现多 0 会导致显示导入成功但实际没生效的情况。
+
+p. 经过与友人多次测试，还发现文件名必须是 @WhatsApp Chat with name or phone number.txt@ 的格式，但文件名的用户名不用作分辨导入消息中哪方对应哪方。当聊天记录为一方手机号、另一方非手机号时手机号的那方将会成为对方，而手机号是自己的时也不会和 Telegram 账号手机号进行匹配（就是反了）。有三个用户名的时候，所有人的消息都将展示在对方一侧（推荐你导入群组）。
+
+p. WhatsApp 可以带媒体导出，但是测试发现大部分文件（包括照片）被 Telegram 忽略了。所以我没有研究文件。
+
+h2. 导出 QQ 消息
+
+新界面的 TIM 把头像的消息管理器入口删掉了。所以可以使用 PC 版 QQ 或 TIM 点开任一联系人的消息记录，点开消息管理器，点「导出全部消息记录」。
+
+!http://telegra.ph/file/9eb8836b1644dee137070.png!
+
+!http://telegra.ph/file/b7312e07706111fda0696.png!
+
+h2. 转换
+
+写了个转换脚本，放在 "*import2telegram*":https://github.com/OverflowCat/import2telegram 里。 @qqtxt.py@ 可以帮助你生成 WhatsApp 格式的聊天记录导出文件，无需安装第三方 Python 库。
+
+p. 请将导出的 txt 文件置于脚本同一目录下，执行 @python3 qqtxt.py@ ，即可为每个聊天生成导入用的文件。
+
+脚本里推荐修改 @your_qq_names@ 和 @import_3rd@ 两个参数，否则将无法导入左右形式的对话。
+
+h2. 分享至 Telegram
+
+找到你想导入的对话的生成的 txt 文件，传到移动设备上。
+
+你可以发送给 Saved messages，这时要注意，分享（而不是转发）这个文件给 Telegram 应用自己，这时就会触发导入界面。
+
+!http://telegra.ph/file/7660f0bf794693ed0105f.jpg!
+
+!http://telegra.ph/file/b71100cb28a5677c5e2ed.jpg!
+
+h2. 结语
+
+在找导出 QQ 聊天记录的方法时还是大费周章了。大部分的聊天软件都试图让消息迁移变得愈发困难来增大用户黏性。选择更开放的平台（比如还有 Matrix）不失为保护自己数据的良方。有如 Durov 所言：
+
+bq. Nothing like this has ever been made possible by a major app, and our team had to implement some serious magic to make it work. ... The original meaning of the paper plane on the Telegram logo means “freedom”. For us, freedom of choice and data portability are paramount. People should be in complete control over their own data – and their own lives.

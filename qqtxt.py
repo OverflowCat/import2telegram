@@ -8,10 +8,18 @@ generate_files = True
 qq_txt_filename = "全部消息记录.txt"
 qq_txt_path = qq_txt_filename
 data = ""
-your_qq_names = ["你的QQ用户名"]
-phone_number = "+1 (114) 514-1919"
+your_qq_names = [""]
+
+import_3rd = True 
+  # 导入第三方消息，
+  # 为真时第三方消息将改为对方发送的，
+  # 为假时将不改动
+
+phone_number = "+1 (114) 514-1919" # 填任何符合格式的手机号都没影响，不作为判断用户身份的标准
   # 手机号是对方！！！如对话中没有手机号，则所有消息都显示为对方的。
   # Please write in the standard format like "+1 (114) 514-1919"
+if "".join(your_qq_names) == "" or import_3rd == False:
+    phone_number = ""
 
 def waDateConverter(qqDateStr): #convert QQ date to WhatsAppish date 
     tup = time.strptime(qqDateStr.strip(), r"%Y-%m-%d %H:%M:%S")
@@ -53,8 +61,11 @@ for chat in chats:
             if msg.strip() != "": # 跳过空消息
                 msgs.append(msginfo + msg.strip())
             username = l.replace(msgDateStr, "")
-            if phone_number != "" and username not in your_qq_names:
-                username = phone_number
+            if phone_number != "":
+                if username not in your_qq_names:
+                    username = phone_number
+                else:
+                    username = your_qq_names[0]
             msginfo = f"{waDateConverter(msgDateStr)} - {username}: "
             msg = ""
         elif l == "":
@@ -73,7 +84,7 @@ def filterText(t):
 if generate_files:
     for chatobj in chatsoutput:
         with codecs.open(f"WhatsApp Chat with {filterText(chatobj['name'])}.txt", "w", encoding='utf-8') as writer:
-            writer.write("1/29/17, 9:19 AM - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more.\n" + chatobj["content"])
+            writer.write("1/29/17, 9:19 AM - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more.\n" + chatobj["content"] + "\n")
 
 ## debug
 if False:
