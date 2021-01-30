@@ -9,7 +9,8 @@ qq_txt_filename = "全部消息记录.txt"
 qq_txt_path = qq_txt_filename
 data = ""
 your_qq_names = ["你的QQ用户名"]
-your_telegram_phone_number = ""
+phone_number = "+1 (114) 514-1919"
+  # 手机号是对方！！！如对话中没有手机号，则所有消息都显示为对方的。
   # Please write in the standard format like "+1 (114) 514-1919"
 
 def waDateConverter(qqDateStr): #convert QQ date to WhatsAppish date 
@@ -52,8 +53,8 @@ for chat in chats:
             if msg.strip() != "": # 跳过空消息
                 msgs.append(msginfo + msg.strip())
             username = l.replace(msgDateStr, "")
-            if your_telegram_phone_number != "" and username in your_qq_names:
-                username = your_telegram_phone_number
+            if phone_number != "" and username not in your_qq_names:
+                username = phone_number
             msginfo = f"{waDateConverter(msgDateStr)} - {username}: "
             msg = ""
         elif l == "":
@@ -72,7 +73,7 @@ def filterText(t):
 if generate_files:
     for chatobj in chatsoutput:
         with codecs.open(f"WhatsApp Chat with {filterText(chatobj['name'])}.txt", "w", encoding='utf-8') as writer:
-            writer.write("1/29/17, 9:19 AM - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more." + chatobj["content"])
+            writer.write("1/29/17, 9:19 AM - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more.\n" + chatobj["content"])
 
 ## debug
 if False:
